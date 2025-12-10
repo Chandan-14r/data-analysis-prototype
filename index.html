@@ -3,1031 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataTalk - AI-Powered Data Analysis</title>
+    <title>DataTalk AI - Intelligent Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent-color: #10b981;
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #ec4899;
+            --accent: #10b981;
             --dark-bg: #0f172a;
-            --card-bg: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --border-color: #e2e8f0;
-            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
-            --radius: 16px;
-            --transition: all 0.3s ease;
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+            --radius: 20px;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
+            /* Modern Animated Gradient Background */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
         
-        /* Header */
+        /* Glassmorphism Header */
         header {
-            background: var(--dark-bg);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
             padding: 40px;
             border-radius: var(--radius);
             margin-bottom: 30px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-gradient);
-            opacity: 0.9;
-            z-index: 0;
-        }
-        
-        .header-content {
-            position: relative;
-            z-index: 1;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-        }
-        
-        h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-            font-weight: 800;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
         }
         
-        .tagline {
-            font-size: 18px;
-            opacity: 0.9;
-            margin-bottom: 20px;
-            max-width: 600px;
-        }
+        .header-left h1 { font-size: 36px; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
+        .header-left p { opacity: 0.8; font-size: 16px; max-width: 500px; }
         
-        .stats {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
+        .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-left: 10px;
+            vertical-align: middle;
         }
+
+        /* Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) { .main-content { grid-template-columns: 1fr; } }
         
-        .stat-item {
+        /* Glass Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
         }
         
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-        }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+        .card-title { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; }
+        .card-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 5px; font-weight: 500; }
         
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        /* Main Content */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Cards */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            height: 100%;
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-5px);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .card-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        .card-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 5px;
-        }
-        
-        /* Upload Section */
+        /* Upload Area */
         .upload-box {
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 50px 30px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px 20px;
             text-align: center;
             cursor: pointer;
-            transition: var(--transition);
-            background: #f8fafc;
+            transition: all 0.3s ease;
+            background: rgba(248, 250, 252, 0.5);
             position: relative;
-            margin-bottom: 25px;
+            overflow: hidden;
         }
         
-        .upload-box:hover {
-            border-color: #667eea;
-            background: #f1f5f9;
-        }
+        .upload-box:hover { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); transform: translateY(-2px); }
+        .upload-box.drag-over { border-color: var(--accent); background: rgba(16, 185, 129, 0.05); scale: 0.98; }
         
-        .upload-box.drag-over {
-            border-color: var(--accent-color);
-            background: rgba(16, 185, 129, 0.05);
-        }
+        .upload-icon { font-size: 40px; margin-bottom: 15px; color: var(--primary); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .upload-box:hover .upload-icon { transform: scale(1.2) rotate(10deg); }
         
-        .upload-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            color: #667eea;
-        }
-        
-        .upload-text {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        
-        .upload-subtext {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        
-        .file-info {
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .file-info.show {
-            display: flex;
-        }
-        
-        .file-name {
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .remove-file {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 18px;
-        }
-        
-        /* Query Section */
-        .query-input-wrapper {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
+        /* Inputs & Buttons */
         .query-input {
             width: 100%;
-            padding: 18px 20px 18px 50px;
+            padding: 16px;
             border: 2px solid var(--border-color);
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-family: inherit;
-            transition: var(--transition);
-            background: #f8fafc;
-            resize: vertical;
-            min-height: 120px;
-        }
-        
-        .query-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            transition: all 0.3s;
             background: white;
+            resize: none;
+            height: 120px;
+            margin-bottom: 15px;
         }
         
-        .query-icon {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            color: var(--text-secondary);
-        }
+        .query-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
         
         .btn {
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 16px 30px;
+            padding: 14px 24px;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 16px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .btn-secondary {
-            background: var(--secondary-gradient);
-        }
-        
-        /* Results Section */
-        .chart-container {
             position: relative;
-            height: 300px;
-            margin-bottom: 30px;
+            overflow: hidden;
         }
         
-        .insights-container {
-            margin-top: 30px;
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
         
-        .insights-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+        .btn:hover::after { left: 100%; }
         
-        .insight-tabs {
-            display: flex;
-            gap: 10px;
-        }
+        .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-secondary); }
+        .btn-outline:hover { border-color: var(--text-primary); color: var(--text-primary); background: white; }
         
-        .insight-tab {
+        /* Visualization Area */
+        .chart-wrapper { position: relative; height: 350px; width: 100%; margin: 20px 0; }
+        
+        .chart-controls { display: flex; gap: 10px; margin-bottom: 20px; background: #f1f5f9; padding: 5px; border-radius: 10px; width: fit-content; }
+        .chart-type-btn {
             padding: 8px 16px;
-            background: #f1f5f9;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .insight-tab.active {
-            background: var(--primary-gradient);
-            color: white;
-        }
-        
-        .insight-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--accent-color);
-        }
-        
-        .insight-card:nth-child(2) {
-            border-left-color: #667eea;
-        }
-        
-        .insight-card:nth-child(3) {
-            border-left-color: #f59e0b;
-        }
-        
-        .insight-title {
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-        
-        .insight-text {
             color: var(--text-secondary);
-            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chart-type-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Dynamic Insights */
+        .ai-message {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease;
         }
         
-        /* Features Section */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
+        .ai-message h4 { color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .ai-message p { font-size: 14px; color: var(--text-secondary); }
         
-        .feature-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            text-align: center;
-        }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .stat-box { background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); text-align: center; }
+        .stat-label { font-size: 12px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 5px; }
+        .stat-val { font-size: 20px; font-weight: 700; color: var(--text-primary); }
         
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
+        /* Loading */
+        .loading-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9);
+            display: none; justify-content: center; align-items: center; flex-direction: column;
+            z-index: 10; border-radius: var(--radius);
         }
-        
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: white;
-            font-size: 28px;
-        }
-        
-        .feature-name {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .feature-desc {
-            color: var(--text-secondary);
-            font-size: 15px;
-        }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 30px;
-        }
-        
-        /* Loading State */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 30px;
-        }
-        
-        .loading.show {
-            display: block;
-        }
-        
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f1f5f9;
-            border-top: 5px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            width: 40px; height: 40px; border: 4px solid #e2e8f0;
+            border-top: 4px solid var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Animations */
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .file-pill {
+            background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
+            padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
+            display: flex; align-items: center; justify-content: space-between; margin-top: 15px;
+            animation: slideIn 0.3s ease;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 32px;
-            }
-            
-            .stats {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .card {
-                padding: 20px;
-            }
-            
-            .feature-card {
-                padding: 20px;
-            }
-        }
+        .result-panel { display: none; opacity: 0; transition: opacity 0.5s ease; }
+        .result-panel.show { display: block; opacity: 1; }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <h1><i class="fas fa-chart-line"></i> DataTalk AI</h1>
-                <p class="tagline">Transform your data into actionable insights with natural language. No SQL or data science skills required.</p>
-                
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-value">2.5M+</span>
-                        <span class="stat-label">Analyses Completed</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">99.8%</span>
-                        <span class="stat-label">Accuracy Rate</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">&lt;2s</span>
-                        <span class="stat-label">Avg. Response Time</span>
-                    </div>
+
+<div class="container">
+    <header>
+        <div class="header-left">
+            <h1>DataTalk AI <span class="badge">GPT-4 Turbo</span></h1>
+            <p>Transform raw data into beautiful, actionable insights instantly.</p>
+        </div>
+        <div style="text-align: right;">
+            <div style="font-size: 32px; font-weight: 700;">99.9%</div>
+            <div style="font-size: 13px; opacity: 0.7;">Accuracy Score</div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Data Source</div>
+                    <div class="card-subtitle">Step 1: Upload dataset</div>
                 </div>
             </div>
-        </header>
-        
-        <div class="main-content">
-            <!-- Upload Section -->
-            <div class="card">
+
+            <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <div style="font-weight: 600; color: var(--text-primary);">Click or Drop File</div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;">CSV, Excel, JSON (Max 20MB)</div>
+            </div>
+            <input type="file" id="fileInput" hidden accept=".csv,.xlsx,.json">
+            
+            <div id="fileDisplay"></div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 25px 0;">
+
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Analysis Query</div>
+                    <div class="card-subtitle">Step 2: Ask a question</div>
+                </div>
+            </div>
+
+            <textarea class="query-input" id="queryInput" placeholder="e.g., 'Show me the sales trend for Q3' or 'Compare revenue by region'"></textarea>
+
+            <button class="btn" onclick="runAnalysis()">
+                <i class="fas fa-magic"></i> Generate Insights
+            </button>
+            <button class="btn btn-outline" onclick="clearAll()" style="margin-top: 10px;">
+                Reset
+            </button>
+        </div>
+
+        <div class="card" style="position: relative;">
+            <div class="loading-overlay" id="loader">
+                <div class="spinner"></div>
+                <div style="font-weight: 600; color: var(--text-primary);">Processing Data...</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Analyzing patterns & generating charts</div>
+            </div>
+
+            <div id="emptyState" style="text-align: center; margin: auto; opacity: 0.5;">
+                <i class="fas fa-chart-pie" style="font-size: 64px; margin-bottom: 20px; color: var(--border-color);"></i>
+                <h3>Ready to Analyze</h3>
+                <p>Upload a file and ask a question to see results.</p>
+            </div>
+
+            <div id="resultPanel" class="result-panel">
                 <div class="card-header">
                     <div>
-                        <div class="card-title">Upload & Analyze</div>
-                        <div class="card-subtitle">Step 1: Upload your data file</div>
+                        <div class="card-title" id="chartTitle">Analysis Result</div>
+                        <div class="card-subtitle">AI-Generated Visualization</div>
                     </div>
-                    <i class="fas fa-cloud-upload-alt" style="color: #667eea; font-size: 28px;"></i>
-                </div>
-                
-                <div class="upload-box" id="uploadBox">
-                    <div class="upload-icon">
-                        <i class="fas fa-file-import"></i>
-                    </div>
-                    <div class="upload-text">Drag & Drop Your File Here</div>
-                    <div class="upload-subtext">or click to browse. Supports CSV, Excel, JSON (Max 20MB)</div>
-                    <button class="btn" style="width: auto; margin-top: 15px; padding: 12px 24px;">
-                        <i class="fas fa-search"></i> Browse Files
-                    </button>
-                </div>
-                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.json" style="display: none;">
-                
-                <div class="file-info" id="fileInfo">
-                    <div class="file-name">
-                        <i class="fas fa-file-csv" style="color: #10b981;"></i>
-                        <span id="fileName">sample_data.csv</span>
-                    </div>
-                    <button class="remove-file" id="removeFile">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="query-section">
-                    <div class="card-subtitle" style="margin-bottom: 15px;">Step 2: Ask your data anything</div>
-                    <div class="query-input-wrapper">
-                        <i class="fas fa-question-circle query-icon"></i>
-                        <textarea class="query-input" id="queryInput" placeholder="Examples:&#10;• What's the correlation between marketing spend and revenue?&#10;• Show me sales trends by region for the last quarter&#10;• Which customer segment has the highest lifetime value?&#10;• Predict next month's revenue based on current trends"></textarea>
-                    </div>
-                    
-                    <div class="loading" id="loading">
-                        <div class="spinner"></div>
-                        <p>Analyzing your data with AI... This usually takes a few seconds.</p>
-                    </div>
-                    
-                    <button class="btn" onclick="analyzeData()" id="analyzeBtn">
-                        <i class="fas fa-rocket"></i> Analyze with AI
-                    </button>
-                    
-                    <div style="margin-top: 20px; display: flex; gap: 10px;">
-                        <button class="btn btn-secondary" onclick="showSampleAnalysis()" style="width: auto; flex: 1;">
-                            <i class="fas fa-eye"></i> View Sample Analysis
-                        </button>
-                        <button class="btn" onclick="clearAll()" style="width: auto; flex: 1; background: #f1f5f9; color: #64748b;">
-                            <i class="fas fa-redo"></i> Clear All
+                    <div>
+                        <button class="btn-outline" onclick="downloadChart()" style="padding: 8px 15px; width: auto; font-size: 12px;">
+                            <i class="fas fa-download"></i> Export
                         </button>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Results Section -->
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Analysis Results</div>
-                        <div class="card-subtitle">Interactive charts and insights generated by AI</div>
-                    </div>
-                    <i class="fas fa-chart-bar" style="color: #10b981; font-size: 28px;"></i>
+
+                <div class="ai-message">
+                    <h4><i class="fas fa-robot" style="color: var(--primary);"></i> AI Insight</h4>
+                    <p id="insightText">Loading insight...</p>
+                    <div class="stat-grid" id="statGrid">
+                        </div>
                 </div>
-                
-                <div class="insights-header">
-                    <div class="card-title" style="margin-bottom: 0;">Key Insights</div>
-                    <div class="insight-tabs">
-                        <div class="insight-tab active" onclick="switchTab('overview')">Overview</div>
-                        <div class="insight-tab" onclick="switchTab('trends')">Trends</div>
-                        <div class="insight-tab" onclick="switchTab('recommendations')">Recommendations</div>
-                    </div>
+
+                <div class="chart-controls">
+                    <button class="chart-type-btn active" onclick="switchChartType('bar')"><i class="fas fa-chart-bar"></i> Bar</button>
+                    <button class="chart-type-btn" onclick="switchChartType('line')"><i class="fas fa-chart-line"></i> Line</button>
+                    <button class="chart-type-btn" onclick="switchChartType('doughnut')"><i class="fas fa-chart-pie"></i> Doughnut</button>
                 </div>
-                
-                <div class="chart-container">
-                    <canvas id="resultChart"></canvas>
-                </div>
-                
-                <div class="insights-container" id="overviewTab">
-                    <div class="insight-card">
-                        <div class="insight-title">Revenue Growth</div>
-                        <div class="insight-text">Product C shows the highest revenue at $52K, which is 23% above the average and demonstrates a consistent upward trend quarter-over-quarter.</div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-title">Regional Performance</div>
-                        <div class="insight-text">North America leads with 42% of total sales, followed by Europe at 28%. The APAC region shows the fastest growth at 15% month-over-month.</div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-title">Customer Insights</div>
-                        <div class="insight-text">The 25-34 age group represents 38% of your customer base and has the highest average order value at $147. Customer retention rate is 78%.</div>
-                    </div>
-                </div>
-                
-                <div class="insights-container" id="trendsTab" style="display: none;">
-                    <div class="insight-card">
-                        <div class="insight-title">Seasonal Trends</div>
-                        <div class="insight-text">Sales peak in Q4 (November-December) with an average increase of 42% compared to other quarters. Consider increasing inventory during this period.</div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-title">Product Lifecycle</div>
-                        <div class="insight-text">Product A is showing signs of maturity with declining growth (-5% month-over-month). Consider promotional strategies or product refreshes.</div>
-                    </div>
-                </div>
-                
-                <div class="insights-container" id="recommendationsTab" style="display: none;">
-                    <div class="insight-card">
-                        <div class="insight-title">Optimization Opportunities</div>
-                        <div class="insight-text">Increase marketing spend on Product C in the APAC region, where it shows the highest growth potential. Consider a 15% budget reallocation.</div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-title">Risk Mitigation</div>
-                        <div class="insight-text">Diversify supplier base for Product D to reduce dependency on a single source, which currently represents 85% of your supply chain.</div>
-                    </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="mainChart"></canvas>
                 </div>
             </div>
         </div>
-        
-        <!-- Features Section -->
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <div class="feature-name">Advanced AI Analysis</div>
-                <div class="feature-desc">Uses GPT-4 and machine learning algorithms to understand your data context and provide accurate insights.</div>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <div class="feature-name">Real-Time Processing</div>
-                <div class="feature-desc">Get insights in seconds, not hours. Our infrastructure processes millions of data points instantly.</div>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="feature-name">Secure & Private</div>
-                <div class="feature-desc">Your data never leaves your browser. All processing happens locally with enterprise-grade encryption.</div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>© 2023 DataTalk AI. All rights reserved. | <i class="fas fa-envelope"></i> support@datatalk.ai | <i class="fas fa-question-circle"></i> Help Center</p>
-            <p style="margin-top: 10px; font-size: 12px;">Supports CSV, XLSX, XLS, and JSON formats. For large datasets (>1M rows), contact our enterprise team.</p>
-        </footer>
     </div>
     
-    <script>
-        let chart = null;
-        let currentFile = null;
-        
-        // Initialize on page load
-        window.addEventListener('load', () => {
-            // Show sample file info
-            document.getElementById('fileInfo').classList.add('show');
-            
-            // Set up drag and drop
-            setupDragAndDrop();
-            
-            // Initialize sample chart
-            showSampleAnalysis();
-        });
-        
-        function setupDragAndDrop() {
-            const uploadBox = document.getElementById('uploadBox');
-            const fileInput = document.getElementById('fileInput');
-            
-            uploadBox.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
-            uploadBox.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadBox.classList.add('drag-over');
-            });
-            
-            uploadBox.addEventListener('dragleave', () => {
-                uploadBox.classList.remove('drag-over');
-            });
-            
-            uploadBox.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadBox.classList.remove('drag-over');
-                
-                if (e.dataTransfer.files.length) {
-                    handleFileUpload(e.dataTransfer.files[0]);
-                }
-            });
-            
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length) {
-                    handleFileUpload(e.target.files[0]);
-                }
-            });
+    <div style="text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
+        &copy; 2025 DataTalk AI. All processing happens locally in your browser.
+    </div>
+</div>
+
+<script>
+    // Global State
+    let chartInstance = null;
+    let currentData = null;
+    let currentLabels = null;
+    let currentTitle = "";
+    
+    // File Upload Handler
+    const fileInput = document.getElementById('fileInput');
+    const fileDisplay = document.getElementById('fileDisplay');
+    const uploadBox = document.getElementById('uploadBox');
+
+    fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    
+    // Drag & Drop logic
+    uploadBox.addEventListener('dragover', (e) => { e.preventDefault(); uploadBox.classList.add('drag-over'); });
+    uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('drag-over'));
+    uploadBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadBox.classList.remove('drag-over');
+        if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+
+    function handleFile(file) {
+        if (!file) return;
+        const icon = file.name.endsWith('.json') ? 'fa-file-code' : 'fa-file-excel';
+        fileDisplay.innerHTML = `
+            <div class="file-pill">
+                <span><i class="fas ${icon}" style="margin-right: 8px;"></i>${file.name}</span>
+                <i class="fas fa-times" style="cursor: pointer; opacity: 0.5;" onclick="clearFile()"></i>
+            </div>
+        `;
+        // Pre-fill a query if empty
+        if(!document.getElementById('queryInput').value) {
+            document.getElementById('queryInput').value = "Analyze the monthly revenue trends and identify top performing regions.";
         }
-        
-        function handleFileUpload(file) {
-            currentFile = file;
-            const fileInfo = document.getElementById('fileInfo');
-            const fileName = document.getElementById('fileName');
-            
-            // Validate file type
-            const validExtensions = ['.csv', '.xlsx', '.xls', '.json'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            
-            if (!validExtensions.includes(fileExtension)) {
-                alert('Please upload a valid CSV, Excel, or JSON file.');
-                return;
-            }
-            
-            // Validate file size (20MB max)
-            if (file.size > 20 * 1024 * 1024) {
-                alert('File size exceeds 20MB limit. Please upload a smaller file.');
-                return;
-            }
-            
-            fileName.textContent = file.name;
-            
-            // Update icon based on file type
-            const fileIcon = fileName.previousElementSibling;
-            if (fileExtension === '.csv') {
-                fileIcon.className = 'fas fa-file-csv';
-                fileIcon.style.color = '#10b981';
-            } else if (fileExtension === '.json') {
-                fileIcon.className = 'fas fa-file-code';
-                fileIcon.style.color = '#f59e0b';
-            } else {
-                fileIcon.className = 'fas fa-file-excel';
-                fileIcon.style.color = '#10b981';
-            }
-            
-            fileInfo.classList.add('show');
-            
-            // Show success message
-            showNotification(`File "${file.name}" uploaded successfully!`, 'success');
+    }
+
+    function clearFile() {
+        fileInput.value = '';
+        fileDisplay.innerHTML = '';
+    }
+
+    // Analysis Logic
+    function runAnalysis() {
+        const query = document.getElementById('queryInput').value;
+        const hasFile = fileDisplay.innerHTML !== "";
+
+        if (!hasFile) {
+            alert("Please upload a data file first.");
+            return;
         }
-        
-        function analyzeData() {
-            const query = document.getElementById('queryInput').value.trim();
-            
-            if (!currentFile) {
-                showNotification('Please upload a data file first.', 'warning');
-                return;
-            }
-            
-            if (!query) {
-                showNotification('Please ask a question about your data.', 'warning');
-                return;
-            }
-            
-            // Show loading state
-            const loading = document.getElementById('loading');
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            
-            loading.classList.add('show');
-            analyzeBtn.disabled = true;
-            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
-            
-            // Simulate AI analysis (in real implementation, this would call an API)
-            setTimeout(() => {
-                loading.classList.remove('show');
-                analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = '<i class="fas fa-rocket"></i> Analyze with AI';
-                
-                // Generate random chart data based on query
-                generateAnalysisResults(query);
-                
-                showNotification('Analysis complete! Results updated.', 'success');
-            }, 2000);
+        if (!query) {
+            alert("Please enter a question.");
+            return;
         }
+
+        // Show Loading
+        document.getElementById('loader').style.display = 'flex';
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('resultPanel').classList.remove('show');
+
+        // Simulate AI Latency (1.5s)
+        setTimeout(() => {
+            generateFakeData(query);
+            renderChart('bar');
+            generateInsights(); // <--- True dynamic insights
+            
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('resultPanel').classList.add('show');
+        }, 1500);
+    }
+
+    // 1. Generate Context-Aware Mock Data
+    function generateFakeData(query) {
+        const q = query.toLowerCase();
         
-        function showSampleAnalysis() {
-            // Set sample query
-            document.getElementById('queryInput').value = "Show me revenue by product for the last quarter";
-            
-            // Generate sample chart
-            if (chart) {
-                chart.destroy();
-            }
-            
-            const ctx = document.getElementById('resultChart').getContext('2d');
-            chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
-                    datasets: [{
-                        label: 'Revenue ($)',
-                        data: [45000, 38000, 52000, 29000, 41000],
-                        backgroundColor: [
-                            'rgba(102, 126, 234, 0.9)',
-                            'rgba(118, 75, 162, 0.9)',
-                            'rgba(16, 185, 129, 0.9)',
-                            'rgba(245, 158, 11, 0.9)',
-                            'rgba(239, 68, 68, 0.9)'
-                        ],
-                        borderRadius: 8,
-                        borderSkipped: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `Revenue: $${context.parsed.y.toLocaleString()}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
+        if (q.includes('trend') || q.includes('month') || q.includes('time')) {
+            currentLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+            currentData = currentLabels.map(() => Math.floor(Math.random() * 50000) + 20000);
+            currentTitle = "Revenue Trends Over Time";
+        } else if (q.includes('region') || q.includes('location')) {
+            currentLabels = ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'MEA'];
+            currentData = [85000, 62000, 71000, 34000, 15000]; // Semi-random
+            currentTitle = "Sales Distribution by Region";
+        } else if (q.includes('product') || q.includes('category')) {
+            currentLabels = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Automotive'];
+            currentData = currentLabels.map(() => Math.floor(Math.random() * 80000) + 10000);
+            currentTitle = "Performance by Product Category";
+        } else {
+            // Default Fallback
+            currentLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
+            currentData = [45000, 52000, 48000, 61000];
+            currentTitle = "General Analysis Results";
+        }
+        document.getElementById('chartTitle').innerText = currentTitle;
+    }
+
+    // 2. Generate Logic-Based Insights (The "AI" part)
+    function generateInsights() {
+        const total = currentData.reduce((a, b) => a + b, 0);
+        const maxVal = Math.max(...currentData);
+        const maxIndex = currentData.indexOf(maxVal);
+        const bestLabel = currentLabels[maxIndex];
+        const avg = Math.round(total / currentData.length);
+        
+        // Calculate Growth (Last vs First)
+        const start = currentData[0];
+        const end = currentData[currentData.length - 1];
+        const growth = ((end - start) / start * 100).toFixed(1);
+        const growthIcon = growth > 0 ? 'chart-line' : 'arrow-down';
+        const growthColor = growth > 0 ? '#10b981' : '#ef4444';
+
+        // Construct Natural Language Sentence
+        const text = `Based on the analysis, <strong>${bestLabel}</strong> is the top performer with a value of <strong>${formatMoney(maxVal)}</strong>. 
+                     The data shows a ${growth > 0 ? 'positive' : 'negative'} trend of ${Math.abs(growth)}% across the selected period. 
+                     Average performance sits at ${formatMoney(avg)}.`;
+        
+        document.getElementById('insightText').innerHTML = text;
+
+        // Update Stat Grid
+        document.getElementById('statGrid').innerHTML = `
+            <div class="stat-box">
+                <div class="stat-label">Total Volume</div>
+                <div class="stat-val">${formatMoney(total)}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Top Performer</div>
+                <div class="stat-val" style="color: var(--primary);">${bestLabel}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Growth Rate</div>
+                <div class="stat-val" style="color: ${growthColor};">
+                    <i class="fas fa-${growthIcon}" style="font-size: 0.8em;"></i> ${growth}%
+                </div>
+            </div>
+        `;
+    }
+
+    function formatMoney(num) {
+        return '$' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // 3. Render Chart with Chart.js
+    function renderChart(type) {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        
+        if (chartInstance) chartInstance.destroy();
+
+        // Dynamic Colors
+        const bgColors = currentData.map((_, i) => 
+            type === 'line' ? 'rgba(99, 102, 241, 0.2)' : 
+            `hsl(${240 + (i * 30)}, 70%, 60%)`
+        );
+        const borderColors = currentData.map((_, i) => 
+            type === 'line' ? '#6366f1' : 
+            `hsl(${240 + (i * 30)}, 70%, 50%)`
+        );
+
+        chartInstance = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: currentLabels,
+                datasets: [{
+                    label: 'Value',
+                    data: currentData,
+                    backgroundColor: bgColors,
+                    borderColor: borderColors,
+                    borderWidth: 2,
+                    tension: 0.4, // Smooth curves for lines
+                    fill: type === 'line'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: type === 'doughnut' },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + formatMoney(context.raw);
                             }
                         }
                     }
-                }
-            });
-            
-            // Switch to overview tab
-            switchTab('overview');
-            
-            showNotification('Sample analysis loaded. Upload your own data for personalized insights.', 'info');
-        }
-        
-        function generateAnalysisResults(query) {
-            // Destroy existing chart
-            if (chart) {
-                chart.destroy();
-            }
-            
-            const ctx = document.getElementById('resultChart').getContext('2d');
-            
-            // Generate data based on query keywords
-            const queryLower = query.toLowerCase();
-            let chartType = 'bar';
-            let labels = [];
-            let data = [];
-            let title = 'Analysis Results';
-            
-            if (queryLower.includes('trend') || queryLower.includes('over time')) {
-                chartType = 'line';
-                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-                data = [32000, 35000, 41000, 38000, 47000, 52000];
-                title = 'Revenue Trend Over Time';
-            } else if (queryLower.includes('region') || queryLower.includes('location')) {
-                labels = ['North America', 'Europe', 'APAC', 'Latin America', 'Middle East'];
-                data = [42000, 28000, 19000, 12000, 8000];
-                title = 'Revenue by Region';
-            } else if (queryLower.includes('product') || queryLower.includes('item')) {
-                labels = ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'];
-                data = [45000, 38000, 52000, 29000, 41000];
-                title = 'Revenue by Product';
-            } else if (queryLower.includes('customer') || queryLower.includes('segment')) {
-                chartType = 'doughnut';
-                labels = ['25-34 Years', '35-44 Years', '18-24 Years', '45+ Years'];
-                data = [38, 28, 22, 12];
-                title = 'Customer Distribution by Age';
-            } else {
-                labels = ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'];
-                data = [25000, 32000, 41000, 28000, 37000];
-                title = 'Data Analysis';
-            }
-            
-            chart = new Chart(ctx, {
-                type: chartType,
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: title,
-                        data: data,
-                        backgroundColor: chartType === 'line' 
-                            ? 'rgba(102, 126, 234, 0.1)' 
-                            : [
-                                'rgba(102, 126, 234, 0.9)',
-                                'rgba(118, 75, 162, 0.9)',
-                                'rgba(16, 185, 129, 0.9)',
-                                'rgba(245, 158, 11, 0.9)',
-                                'rgba(239, 68, 68, 0.9)'
-                            ],
-                        borderColor: chartType === 'line' ? 'rgba(102, 126, 234, 1)' : undefined,
-                        borderWidth: chartType === 'line' ? 3 : 0,
-                        fill: chartType === 'line',
-                        tension: chartType === 'line' ? 0.4 : 0,
-                        borderRadius: chartType === 'bar' ? 8 : 0,
-                        borderSkipped: false
-                    }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: chartType === 'doughnut',
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: title,
-                            font: {
-                                size: 16
-                            },
-                            padding: {
-                                bottom: 20
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    if (chartType === 'doughnut') {
-                                        return `${context.label}: ${context.parsed}%`;
-                                    }
-                                    return `${context.dataset.label}: $${context.parsed.y.toLocaleString()}`;
-                                }
-                            }
-                        }
+                scales: type === 'doughnut' ? {} : {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e2e8f0', borderDash: [5, 5] }
                     },
-                    scales: chartType !== 'doughnut' ? {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return chartType === 'line' || chartType === 'bar' ? '$' + value.toLocaleString() : value;
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    } : {}
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutQuart'
                 }
-            });
-        }
-        
-        function switchTab(tabName) {
-            // Update active tab
-            document.querySelectorAll('.insight-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            event.target.classList.add('active');
-            
-            // Show selected tab content
-            document.getElementById('overviewTab').style.display = 'none';
-            document.getElementById('trendsTab').style.display = 'none';
-            document.getElementById('recommendationsTab').style.display = 'none';
-            document.getElementById(tabName + 'Tab').style.display = 'block';
-        }
-        
-        function clearAll() {
-            // Clear file
-            currentFile = null;
-            document.getElementById('fileInfo').classList.remove('show');
-            document.getElementById('fileInput').value = '';
-            
-            // Clear query
-            document.getElementById('queryInput').value = '';
-            
-            // Reset chart to sample
-            showSampleAnalysis();
-            
-            showNotification('All data cleared. Ready for new analysis.', 'info');
-        }
-        
-        function showNotification(message, type) {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-            `;
-            
-            if (type === 'success') {
-                notification.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-            } else if (type === 'warning') {
-                notification.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
-            } else {
-                notification.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
             }
-            
-            notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                ${message}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-        
-        // Add CSS animations for notifications
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+        });
+
+        // Update Buttons
+        document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`button[onclick="switchChartType('${type}')"]`).classList.add('active');
+    }
+
+    function switchChartType(type) {
+        if (!currentData) return;
+        renderChart(type);
+    }
+
+    function clearAll() {
+        clearFile();
+        document.getElementById('queryInput').value = '';
+        document.getElementById('resultPanel').classList.remove('show');
+        document.getElementById('emptyState').style.display = 'block';
+        if (chartInstance) chartInstance.destroy();
+        currentData = null;
+    }
+
+    function downloadChart() {
+        const link = document.createElement('a');
+        link.download = 'datatalk-analysis.png';
+        link.href = document.getElementById('mainChart').toDataURL();
+        link.click();
+    }
+</script>
+
 </body>
 </html>
